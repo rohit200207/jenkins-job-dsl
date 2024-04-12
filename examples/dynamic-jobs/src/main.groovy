@@ -32,4 +32,11 @@ for (current_pipeline in pipeline_file_list) {
 
     print("jobname is: "+parsed_job_config.job_name)
 
+    job(parsed_job_config.job_name) {
+        steps {
+            shell('echo Hello World!')
+        }
+    }
+
+
 }
