@@ -21,6 +21,8 @@ class JobUtils{
         return this.job_config.build_command
     }
 
-
+    ArrayList get_environments() {
+        return this.job_config.env
+    }
 
 }
