@@ -36,34 +36,35 @@ for (current_pipeline in pipeline_file_list) {
     def dev_stage = ""
     def qa_stage = ""
     def prod_stage = ""
+
     if ("dev" in env_list) {
         dev_stage = """
             stage('Deploy DEV') {
-                steps {
-                    echo 'Deploying the project...'
-                }
+                       steps {
+                              echo 'Deploying the project...'
+                       }
             }
-"""
+           """
     }
     if ("qa" in env_list) {
         qa_stage = """
             stage('Deploy QA') {
-                steps {
-                    echo 'Deploying the project...'
-                }
+                       steps {
+                              echo 'Deploying the project...'
+                       }
             }
 
-"""
+            """
     }
     if ("prod" in env_list) {
         prod_stage = """
              stage('Deploy PROD') {
-                steps {
-                    echo 'Deploying the project...'
-                }
-            }
+                          steps {
+                                 echo 'Deploying the project...'
+                          }
+             }
 
-"""
+             """
 
     }
 
