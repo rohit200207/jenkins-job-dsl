@@ -1,5 +1,8 @@
 import hudson.model.*
 import utils.JobUtils
+import jobTemplates.KubeDeployment
+import jobTemplates.MavenDeployment
+
 
 // function to search for all the files ending with .yaml or .yml
 ArrayList searchYamlFiles(String dirPath) {
@@ -30,89 +33,16 @@ for (current_pipeline in pipeline_file_list) {
     JobUtils job_config = new JobUtils(current_pipeline)
 
     print("jobname is: " + job_config.get_job_name())
-// collect all the env data
-    def env_list = job_config.get_environments()
 
-    def dev_stage = ""
-    def qa_stage = ""
-    def prod_stage = ""
+    String job_type = job_config.get_job_type()  // jobTemplates
 
-    if ("dev" in env_list) {
-        dev_stage = """
-            stage('Deploy DEV') {
-                       steps {
-                              echo 'Deploying the project...'
-                       }
-            }
-           """
+    if("kubernetes"==job_type){
+        new KubeDeployment(pipelineJob(job_config.get_job_name()),job_config)
     }
-    if ("qa" in env_list) {
-        qa_stage = """
-            stage('Deploy QA') {
-                       steps {
-                              echo 'Deploying the project...'
-                       }
-            }
-
-            """
-    }
-    if ("prod" in env_list) {
-        prod_stage = """
-             stage('Deploy PROD') {
-                          steps {
-                                 echo 'Deploying the project...'
-                          }
-             }
-
-             """
-
+    else if("maven"==job_type){
+        new MavenDeployment(pipelineJob(job_config.get_job_name()),job_config)
     }
 
-
-    pipelineJob(job_config.get_job_name()) {
-        definition {
-            cps {
-                script("""
-
-pipeline {
-        agent any
-
-        stages {
-
-            stage('Checkout') {
-                steps {
-                    echo 'Checking out source code...'
-                }
-            }
-
-            stage('Build') {
-                steps {
-                    echo '${job_config.get_build_command()}'
-                }
-            }
-
-            stage('Test') {
-                steps {
-                    echo 'Running tests...'
-                }
-            }
-
-            ${dev_stage}
-
-            ${qa_stage}
-
-            ${prod_stage}
-
-
-
-
-        }
-    }
-""")
-                sandbox()
-            }
-        }
-    }
 
 
 }
