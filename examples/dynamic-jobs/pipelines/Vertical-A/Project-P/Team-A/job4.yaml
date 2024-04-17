@@ -1,0 +1,7 @@
+job_name: "dynamic-job-4"
+build_command: "build command for job 4"
+job_type: kubernetes
+env:
+  - dev
+  - qa
+
