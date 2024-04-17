@@ -17,7 +17,7 @@ class JobUtils{
 
     String get_job_name(){
         String slash_split= this.file_path.split("/")[-1]
-        String job_name= slash_split.split {".yaml"}[0].split{".yml"}[0]
+        String job_name= slash_split.split (".yaml")[0].split(".yml")[0]
         return job_name
     }
 
