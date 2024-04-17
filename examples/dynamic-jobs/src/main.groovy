@@ -20,6 +20,19 @@ ArrayList searchYamlFiles(String dirPath) {
     return file_list
 }
 
+//dir-structure
+String create_folder_structure(ArrayList dir_list) {
+    // folder(folder_name)
+    String previous_path = ""
+    for (folder_name in dir_list) {
+        println("going to create folder: " + previous_path + folder_name)
+        folder(previous_path + folder_name)
+        previous_path = previous_path + folder_name + "/"
+    }
+    return previous_path
+}
+
+
 // get the current working directory
 def cwd = hudson.model.Executor.currentExecutor().getCurrentWorkspace().absolutize()
 
@@ -32,17 +45,20 @@ for (current_pipeline in pipeline_file_list) {
 
     JobUtils job_config = new JobUtils(current_pipeline)
 
+    // call the function of dir structure
+    ArrayList dir_structure = job_config.get_directory_structure()
+
+    String directory_prefix = create_folder_structure(dir_structure)
+
     print("jobname is: " + job_config.get_job_name())
 
     String job_type = job_config.get_job_type()  // jobTemplates
 
-    if("kubernetes"==job_type){
-        new KubeDeployment().create(pipelineJob(job_config.get_job_name()),job_config)
+    if ("kubernetes" == job_type) {
+        new KubeDeployment().create(pipelineJob(directory_prefix + job_config.get_job_name()), job_config)
+    } else if ("maven" == job_type) {
+        new MavenDeployment().create(pipelineJob(directory_prefix + job_config.get_job_name()), job_config)
     }
-    else if("maven"==job_type){
-        new MavenDeployment().create(pipelineJob(job_config.get_job_name()),job_config)
-    }
-
 
 
 }

@@ -15,6 +15,14 @@ class JobUtils{
         this.file_path=current_pipeline
     }
 
+    // extracting the folder structure
+    ArrayList get_directory_structure(){
+        ArrayList dir_list = this.file_path.split("/pipelines/")[1].split("/")
+        dir_list.remove(dir_list.size()-1)
+        return dir_list
+    }
+
+
     String get_job_name(){
         String slash_split= this.file_path.split("/")[-1]
         String job_name= slash_split.split (".yaml")[0].split(".yml")[0]
