@@ -40,7 +40,7 @@ for (current_pipeline in pipeline_file_list) {
         new KubeDeployment().create(pipelineJob(job_config.get_job_name()),job_config)
     }
     else if("maven"==job_type){
-        new MavenDeployment.create(pipelineJob(job_config.get_job_name()),job_config)
+        new MavenDeployment().create(pipelineJob(job_config.get_job_name()),job_config)
     }
 
 
